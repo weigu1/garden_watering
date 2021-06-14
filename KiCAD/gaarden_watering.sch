@@ -1,0 +1,518 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "gaarden watering"
+Date "2021-06-10"
+Rev "1"
+Comp "weigu.lu"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L weigu:ESP8266_LOLIN_D1_mini W?
+U 1 1 60C1E80C
+P 4100 2350
+F 0 "W?" H 4242 3137 60  0000 C CNN
+F 1 "ESP8266_LOLIN_D1_mini" H 4242 3031 60  0000 C CNN
+F 2 "" H 4100 2350 60  0001 C CNN
+F 3 "" H 4100 2350 60  0001 C CNN
+	1    4100 2350
+	1    0    0    -1  
+$EndComp
+Text Notes 5900 1740 0    50   ~ 0
+IN1
+$Comp
+L weigu:Relay_changer K?
+U 1 1 60C26A86
+P 2700 5100
+F 0 "K?" H 3130 5146 50  0000 L CNN
+F 1 "Relay_0 (IN1)" H 2300 4700 50  0000 L CNN
+F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 3150 5050 50  0001 L CNN
+F 3 "" H 2700 5100 50  0001 C CNN
+	1    2700 5100
+	-1   0    0    1   
+$EndComp
+Text Notes 5900 1890 0    50   ~ 0
+IN2
+Text Notes 5900 2040 0    50   ~ 0
+IN3
+Text Notes 5900 2190 0    50   ~ 0
+IN4
+Text Notes 5900 2340 0    50   ~ 0
+IN5
+Text Notes 5900 2490 0    50   ~ 0
+IN6
+Text Notes 5900 2640 0    50   ~ 0
+IN7
+Text Notes 5900 2790 0    50   ~ 0
+IN8
+$Comp
+L weigu:SIL1x4L J?
+U 1 1 60C70B64
+P 2800 2650
+F 0 "J?" H 2850 2950 50  0000 C CNN
+F 1 "BME280" H 2950 2250 50  0000 C CNN
+F 2 "" H 2800 2650 60  0000 C CNN
+F 3 "" H 2800 2650 60  0000 C CNN
+	1    2800 2650
+	-1   0    0    1   
+$EndComp
+Text Notes 2450 2750 0    50   ~ 0
+GND
+Text Notes 2450 2900 0    50   ~ 0
+VIN
+Text Notes 2450 2600 0    50   ~ 0
+SCL
+Text Notes 2450 2450 0    50   ~ 0
+SDA
+$Comp
+L weigu:GND #PWR?
+U 1 1 60C77069
+P 3100 1800
+F 0 "#PWR?" H 2950 1800 50  0001 C CNN
+F 1 "GND" H 3100 1497 50  0000 C CNN
+F 2 "" H 3100 1800 50  0001 C CNN
+F 3 "~" H 3100 1800 50  0001 C CNN
+	1    3100 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 2000 4650 2000
+Wire Wire Line
+	3350 2100 3550 2100
+Wire Wire Line
+	2900 2400 3550 2400
+$Comp
+L weigu:+3.3V #PWR?
+U 1 1 60C8B964
+P 4900 2000
+F 0 "#PWR?" H 4900 1850 50  0001 C CNN
+F 1 "+3.3V" H 4900 2181 50  0000 C CNN
+F 2 "" H 4900 2000 50  0001 C CNN
+F 3 "" H 4900 2000 50  0001 C CNN
+	1    4900 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L weigu:+5V #PWR?
+U 1 1 60C8BEC8
+P 3450 2000
+F 0 "#PWR?" H 3450 1850 50  0001 C CNN
+F 1 "+5V" H 3450 2181 50  0000 C CNN
+F 2 "" H 3450 2000 50  0001 C CNN
+F 3 "" H 3450 2000 50  0001 C CNN
+	1    3450 2000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 2000 3550 2000
+Wire Wire Line
+	3100 1800 3350 1800
+Wire Wire Line
+	3350 1800 3350 2100
+$Comp
+L weigu:+3.3V #PWR?
+U 1 1 60C8DB8F
+P 3050 2950
+F 0 "#PWR?" H 3050 2800 50  0001 C CNN
+F 1 "+3.3V" H 3050 3131 50  0000 C CNN
+F 2 "" H 3050 2950 50  0001 C CNN
+F 3 "" H 3050 2950 50  0001 C CNN
+	1    3050 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 2850 2900 2950
+Wire Wire Line
+	2900 2950 3050 2950
+$Comp
+L weigu:GND #PWR?
+U 1 1 60C8E253
+P 3250 2750
+F 0 "#PWR?" H 3100 2750 50  0001 C CNN
+F 1 "GND" H 3250 2447 50  0000 C CNN
+F 2 "" H 3250 2750 50  0001 C CNN
+F 3 "~" H 3250 2750 50  0001 C CNN
+	1    3250 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 2700 3250 2700
+Wire Wire Line
+	3250 2700 3250 2750
+Wire Wire Line
+	2900 2550 2900 2500
+Wire Wire Line
+	2900 2500 3550 2500
+$Comp
+L weigu:SIL1x2L J?
+U 1 1 60C91C12
+P 4200 3700
+F 0 "J?" H 4300 3350 50  0000 L CNN
+F 1 "DC/DC IN" H 4200 3950 50  0000 L CNN
+F 2 "" H 4200 3700 60  0000 C CNN
+F 3 "" H 4200 3700 60  0000 C CNN
+	1    4200 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L weigu:SIL1x2R J?
+U 1 1 60C924C8
+P 5350 3700
+F 0 "J?" H 5200 3350 50  0000 C CNN
+F 1 "DC/DC OUT" H 5200 3950 50  0000 C CNN
+F 2 "" H 5350 3700 60  0000 C CNN
+F 3 "" H 5350 3700 60  0000 C CNN
+	1    5350 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L weigu:+5V #PWR?
+U 1 1 60C92FA3
+P 5600 3650
+F 0 "#PWR?" H 5600 3500 50  0001 C CNN
+F 1 "+5V" H 5600 3831 50  0000 C CNN
+F 2 "" H 5600 3650 50  0001 C CNN
+F 3 "" H 5600 3650 50  0001 C CNN
+	1    5600 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L weigu:GND #PWR?
+U 1 1 60C93313
+P 5600 3800
+F 0 "#PWR?" H 5450 3800 50  0001 C CNN
+F 1 "GND" H 5600 3497 50  0000 C CNN
+F 2 "" H 5600 3800 50  0001 C CNN
+F 3 "~" H 5600 3800 50  0001 C CNN
+	1    5600 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L weigu:Transformer_1P_1S T?
+U 1 1 60CA05A7
+P 2700 3800
+F 0 "T?" H 2700 4181 50  0000 C CNN
+F 1 "Transformer_1P_1S" H 2700 4090 50  0000 C CNN
+F 2 "" H 2700 3800 50  0001 C CNN
+F 3 "~" H 2700 3800 50  0001 C CNN
+	1    2700 3800
+	1    0    0    -1  
+$EndComp
+Text Notes 2150 3800 0    50   ~ 0
+230V AC
+Text Notes 2950 3800 0    50   ~ 0
+24V AC
+$Comp
+L weigu:graetz D?
+U 1 1 60CA3BE2
+P 3650 3750
+F 0 "D?" H 3600 3450 40  0000 L CNN
+F 1 "4x 1N4007" H 3550 4100 40  0000 L CNN
+F 2 "" V 3650 3650 60  0000 C CNN
+F 3 "" V 3650 3650 60  0000 C CNN
+	1    3650 3750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3100 4000 3200 4000
+Wire Wire Line
+	3100 3600 3250 3600
+Wire Wire Line
+	3450 3600 3450 3500
+Wire Wire Line
+	3450 3500 3650 3500
+Wire Wire Line
+	3900 3750 3900 3650
+Wire Wire Line
+	3900 3650 4100 3650
+Wire Wire Line
+	3400 3750 3400 4150
+Wire Wire Line
+	3400 4150 4100 4150
+Wire Wire Line
+	4100 4150 4100 3800
+Text Notes 4300 3950 0    50   ~ 0
+IN-
+Text Notes 4500 3800 0    50   ~ 0
+DC/DC board\nwith LM2596
+Text Notes 4300 3600 0    50   ~ 0
+IN+
+Text Notes 5050 3950 0    50   ~ 0
+OUT-
+Wire Wire Line
+	5450 3650 5600 3650
+Wire Wire Line
+	5450 3800 5600 3800
+Text Notes 5050 3600 0    50   ~ 0
+OUT+
+$Comp
+L weigu:GND #PWR?
+U 1 1 60CBF763
+P 5300 1300
+F 0 "#PWR?" H 5150 1300 50  0001 C CNN
+F 1 "GND" H 5300 997 50  0000 C CNN
+F 2 "" H 5300 1300 50  0001 C CNN
+F 3 "~" H 5300 1300 50  0001 C CNN
+	1    5300 1300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 1300 5500 1300
+Wire Wire Line
+	5500 1300 5500 1550
+Wire Wire Line
+	5500 1550 5600 1550
+$Comp
+L weigu:+5V #PWR?
+U 1 1 60CC03F1
+P 5450 2900
+F 0 "#PWR?" H 5450 2750 50  0001 C CNN
+F 1 "+5V" H 5450 3081 50  0000 C CNN
+F 2 "" H 5450 2900 50  0001 C CNN
+F 3 "" H 5450 2900 50  0001 C CNN
+	1    5450 2900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 2900 5600 2900
+NoConn ~ 5600 2750
+NoConn ~ 5600 2600
+NoConn ~ 5600 2450
+Wire Wire Line
+	5050 1700 5600 1700
+Wire Wire Line
+	5100 1850 5600 1850
+Wire Wire Line
+	5150 2000 5600 2000
+Wire Wire Line
+	5200 2150 5600 2150
+$Comp
+L weigu:SIL1x10L J?
+U 1 1 60C1F592
+P 5700 2250
+F 0 "J?" H 5700 1450 50  0000 L CNN
+F 1 "Relay board" H 5600 3100 50  0000 L CNN
+F 2 "" H 5700 2250 60  0000 C CNN
+F 3 "" H 5700 2250 60  0000 C CNN
+	1    5700 2250
+	1    0    0    -1  
+$EndComp
+Text Notes 5900 1590 0    50   ~ 0
+GND
+Text Notes 5900 2940 0    50   ~ 0
+\n5V
+Wire Wire Line
+	4650 2500 5050 2500
+Wire Wire Line
+	5050 2500 5050 1700
+Wire Wire Line
+	4650 2400 5100 2400
+Wire Wire Line
+	5100 2400 5100 1850
+Wire Wire Line
+	4650 2300 5150 2300
+Wire Wire Line
+	5150 2300 5150 2000
+Wire Wire Line
+	4650 2200 5200 2200
+Wire Wire Line
+	5200 2200 5200 2150
+Wire Wire Line
+	3550 2300 2950 2300
+Wire Wire Line
+	2950 2300 2950 2100
+Wire Wire Line
+	2950 2100 2350 2100
+Wire Wire Line
+	2350 2100 2350 3150
+Wire Wire Line
+	2350 3150 5200 3150
+Wire Wire Line
+	5200 3150 5200 2300
+Wire Wire Line
+	5200 2300 5600 2300
+NoConn ~ 4650 2600
+NoConn ~ 4650 2700
+NoConn ~ 4650 2100
+NoConn ~ 3550 2200
+$Comp
+L weigu:Relay_changer K?
+U 1 1 60CE5151
+P 3550 5100
+F 0 "K?" H 3300 5500 50  0000 L CNN
+F 1 "Relay_1 (IN2)" H 3150 4700 50  0000 L CNN
+F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 4000 5050 50  0001 L CNN
+F 3 "" H 3550 5100 50  0001 C CNN
+	1    3550 5100
+	-1   0    0    1   
+$EndComp
+$Comp
+L weigu:Relay_changer K?
+U 1 1 60CE5A8F
+P 4400 5100
+F 0 "K?" H 4150 5500 50  0000 L CNN
+F 1 "Relay_2 (IN3)" H 4000 4700 50  0000 L CNN
+F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 4850 5050 50  0001 L CNN
+F 3 "" H 4400 5100 50  0001 C CNN
+	1    4400 5100
+	-1   0    0    1   
+$EndComp
+$Comp
+L weigu:Relay_changer K?
+U 1 1 60CE6249
+P 5250 5100
+F 0 "K?" H 5000 5500 50  0000 L CNN
+F 1 "Relay_3 (IN4)" H 4850 4700 50  0000 L CNN
+F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 5700 5050 50  0001 L CNN
+F 3 "" H 5250 5100 50  0001 C CNN
+	1    5250 5100
+	-1   0    0    1   
+$EndComp
+$Comp
+L weigu:Relay_changer K?
+U 1 1 60CE7424
+P 6100 5100
+F 0 "K?" H 5850 5500 50  0000 L CNN
+F 1 "Relay_4 (IN5)" H 5700 4700 50  0000 L CNN
+F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 6550 5050 50  0001 L CNN
+F 3 "" H 6100 5100 50  0001 C CNN
+	1    6100 5100
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2500 4800 2500 4600
+Wire Wire Line
+	2500 4600 3350 4600
+Wire Wire Line
+	3350 4600 3350 4800
+Wire Wire Line
+	3350 4600 4200 4600
+Wire Wire Line
+	4200 4600 4200 4800
+Connection ~ 3350 4600
+Wire Wire Line
+	4200 4600 5050 4600
+Wire Wire Line
+	5050 4600 5050 4800
+Connection ~ 4200 4600
+Wire Wire Line
+	5050 4600 5900 4600
+Wire Wire Line
+	5900 4600 5900 4800
+Connection ~ 5050 4600
+Wire Wire Line
+	3250 3600 3250 4350
+Wire Wire Line
+	3250 4350 3350 4350
+Wire Wire Line
+	3350 4350 3350 4600
+Connection ~ 3250 3600
+Wire Wire Line
+	3250 3600 3450 3600
+$Comp
+L Device:Electromagnetic_Actor L?
+U 1 1 60D00037
+P 2400 5750
+F 0 "L?" H 2530 5846 50  0000 L CNN
+F 1 "Valve 1" H 2530 5755 50  0000 L CNN
+F 2 "" V 2375 5850 50  0001 C CNN
+F 3 "~" V 2375 5850 50  0001 C CNN
+	1    2400 5750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Electromagnetic_Actor L?
+U 1 1 60D09A47
+P 3250 5750
+F 0 "L?" H 3380 5846 50  0000 L CNN
+F 1 "Valve 2" H 3380 5755 50  0000 L CNN
+F 2 "" V 3225 5850 50  0001 C CNN
+F 3 "~" V 3225 5850 50  0001 C CNN
+	1    3250 5750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Electromagnetic_Actor L?
+U 1 1 60D0A0BC
+P 4100 5750
+F 0 "L?" H 4230 5846 50  0000 L CNN
+F 1 "Valve 3" H 4230 5755 50  0000 L CNN
+F 2 "" V 4075 5850 50  0001 C CNN
+F 3 "~" V 4075 5850 50  0001 C CNN
+	1    4100 5750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Electromagnetic_Actor L?
+U 1 1 60D0A61E
+P 4950 5750
+F 0 "L?" H 5080 5846 50  0000 L CNN
+F 1 "Valve 4" H 5080 5755 50  0000 L CNN
+F 2 "" V 4925 5850 50  0001 C CNN
+F 3 "~" V 4925 5850 50  0001 C CNN
+	1    4950 5750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Electromagnetic_Actor L?
+U 1 1 60D0AB72
+P 5800 5750
+F 0 "L?" H 5930 5846 50  0000 L CNN
+F 1 "Valve 5" H 5930 5755 50  0000 L CNN
+F 2 "" V 5775 5850 50  0001 C CNN
+F 3 "~" V 5775 5850 50  0001 C CNN
+	1    5800 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2400 5550 2400 5400
+Wire Wire Line
+	3250 5550 3250 5400
+Wire Wire Line
+	4100 5550 4100 5400
+Wire Wire Line
+	4950 5550 4950 5400
+Wire Wire Line
+	5800 5550 5800 5400
+Wire Wire Line
+	5800 5850 5800 6000
+Wire Wire Line
+	1950 6000 1950 4400
+Wire Wire Line
+	1950 4400 3200 4400
+Wire Wire Line
+	3200 4400 3200 4000
+Connection ~ 3200 4000
+Wire Wire Line
+	3200 4000 3650 4000
+Wire Wire Line
+	2400 5850 2400 6000
+Connection ~ 2400 6000
+Wire Wire Line
+	2400 6000 1950 6000
+Wire Wire Line
+	3250 5850 3250 6000
+Wire Wire Line
+	2400 6000 3250 6000
+Connection ~ 3250 6000
+Wire Wire Line
+	3250 6000 4100 6000
+Wire Wire Line
+	4100 5850 4100 6000
+Connection ~ 4100 6000
+Wire Wire Line
+	4100 6000 4950 6000
+Wire Wire Line
+	4950 5850 4950 6000
+Connection ~ 4950 6000
+Wire Wire Line
+	4950 6000 5800 6000
+NoConn ~ 3550 2600
+NoConn ~ 3600 2700
+$EndSCHEMATC
