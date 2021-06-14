@@ -1,5 +1,5 @@
 /*
-  gaarden_watering.ino
+  garden_watering.ino
 
   V1.0 2021-06-14
 
@@ -80,16 +80,16 @@ IPAddress UDP_LOG_PC_IP(192,168,1,50);
 
 /****** Over The Air update ******/
 #ifdef OTA
-  const char *OTA_NAME = "gaarden_watering";
+  const char *OTA_NAME = "garden_watering";
   const char *OTA_PASS_HASH = "c3be31f8c0878e2a4f007200220ce2ba";
 #endif // #ifdef OTA  
 
 /****** MQTT settings ******/
 #define MQTT_MAX_PACKET_SIZE 512
 const char *MQTT_SERVER = "192.168.1.60";
-const char *MQTT_CLIENT_ID = "gaarden_watering";
-String MQTT_TOPIC_OUT = "weigu/gaarden/watering/data";
-String MQTT_TOPIC_IN = "weigu/gaarden/watering/command";
+const char *MQTT_CLIENT_ID = "garden_watering";
+String MQTT_TOPIC_OUT = "weigu/garden/watering/data";
+String MQTT_TOPIC_IN = "weigu/garden/watering/command";
 #ifdef MQTTSECURE // http://weigu.lu/tutorials/sensors2bus/06_mqtt/index.html
   const short MQTT_PORT = 8883;                      // port for secure communication
   const char *MQTT_USER = "me";

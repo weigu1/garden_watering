@@ -4,7 +4,7 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "gaarden watering"
+Title "garden watering"
 Date "2021-06-10"
 Rev "1"
 Comp "weigu.lu"
