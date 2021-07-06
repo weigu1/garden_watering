@@ -1,5 +1,5 @@
-#ifndef ESPBACKER_h
-#define ESPBACKER_h
+#ifndef ESPTOOLBOX_h
+#define ESPTOOLBOX_h
 
 //#define WEBSERVER  // comment if no webserver needed
 
@@ -35,10 +35,10 @@
 #endif // ifdef ESP8266*/
 
 
-class ESPBacker {
+class ESPToolbox {
   public:
     String my_homepage;
-    
+
     /****** INIT functions ****************************************************/
     void init_led(); // initialise the build in LED and switch it on
     // initialise WiFi, overloaded to add mDNS, hostname and local IP
@@ -59,7 +59,7 @@ class ESPBacker {
     #endif //ifdef WEBSERVER
     //void init_ota();
     void init_ota(const char *OTA_NAME, const char *OTA_PASS_HASH);
-    
+
     /****** GETTER functions **************************************************/
     bool get_led_log(); // get logger flag for LED
     bool get_serial_log(); // get logger flag for Serial
@@ -77,13 +77,13 @@ class ESPBacker {
     void set_serial_log(bool flag, byte interface_number);
     // set logger flag for UDP and pass IP and port
     void set_udp_log(bool flag,IPAddress UDP_LOG_PC_IP,const word UDP_LOG_PORT);
-    
+
     /****** LOGGING functions *************************************************/
     // print log line to Serial and/or remote UDP port
     void log(String message);
     void log_ln();
     void log_ln(String message);
-    
+
     /****** SERVER functions **************************************************/
     #ifdef WEBSERVER
       // pass the webpage as string
@@ -104,7 +104,7 @@ class ESPBacker {
     void blink_led_x_times(byte x, word delay_time_ms);
     bool non_blocking_delay(unsigned long milliseconds);
     byte non_blocking_delay_x3(unsigned long ms_1, unsigned long ms_2, unsigned long ms_3);
-    
+
   private:
     bool enable_led_log = false;
     byte led_log_pin = LED_BUILTIN;
@@ -117,11 +117,11 @@ class ESPBacker {
     IPAddress udp_log_pc_ip;
     WiFiUDP Udp; // create Udp object
     const char *mdns_name = "myESP";
-    
+
 
 
 
 
 };
 
-#endif // ESPBACKER_h
+#endif // ESPTOOLBOX_h

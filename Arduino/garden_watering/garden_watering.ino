@@ -1,10 +1,10 @@
 /*
   garden_watering.ino
 
-  V1.0 2021-06-14
+  V1.0 2021-07-06
 
   ---------------------------------------------------------------------------
-  Copyright (C) 2017 Guy WEILER www.weigu.lu
+  Copyright (C) 2021 Guy WEILER www.weigu.lu
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ const long PUBLISH_TIME = 60000;
 #define USE_SECRETS
 #define BME280_I2C
 
-#include "ESPBacker.h"
+#include "ESPToolbox.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #ifdef BME280_I2C
@@ -60,29 +60,32 @@ const long PUBLISH_TIME = 60000;
 /****** WiFi and network settings ******/
 #ifdef USE_SECRETS
   #include <secrets.h>
-  const char *WIFI_SSID = MY_WIFI_SSID;             
-  const char *WIFI_PASSWORD = MY_WIFI_PASSWORD;     // password
+  const char *WIFI_SSID = MY_WIFI_SSID;           // ssid     
+  const char *WIFI_PASSWORD = MY_WIFI_PASSWORD;   // password
+  #ifdef OTA                                      // Over The Air update settings
+    const char *OTA_NAME = "garden_watering";
+    const char *OTA_PASS_HASH = MY_OTA_PASS_HASH; // md5 hash for OTA
+  #endif // ifdef OTA  
 #else
-  const char* *WIFI_SSID = mySSID;         // if no secrets file, add your SSID here
-  const char* *WIFI_PASSWORD = myPASSWORD; // if no secrets file, add your PASS here
-#endif
-const char *NET_MDNSNAME = "Watering";     // optional (access with myESP.local)
-const char *NET_HOSTNAME = "Watering";     // optional
+  const char *WIFI_SSID = mySSID;           // if no secrets file, add your SSID here
+  const char *WIFI_PASSWORD = myPASSWORD;   // if no secrets file, add your PASS here
+  #ifdef OTA                                // Over The Air update settings
+    const char *OTA_NAME = "garden_watering";
+    const char *OTA_PASS_HASH = myOTAHASH;  // if no secrets file, add your OTA HASH here
+  #endif // ifdef OTA      
+#endif  // ifdef USE_SECRETS
+const char *NET_MDNSNAME = "watering";      // optional (access with myESP.local)
+const char *NET_HOSTNAME = "watering";      // optional
 #ifdef STATIC
-  IPAddress NET_LOCAL_IP (192,168,1,89);   // 3x optional for static IP
+  IPAddress NET_LOCAL_IP (192,168,1,89);    // 3x optional for static IP
   IPAddress NET_GATEWAY (192,168,1,20);
   IPAddress NET_MASK (255,255,255,0);  
 #endif // ifdef STATIC*/
-
-/****** UDP logging settings ******/
-const word UDP_LOG_PORT = 6666;
+const word UDP_LOG_PORT = 6666;             // UDP logging settings
 IPAddress UDP_LOG_PC_IP(192,168,1,50);
-
-/****** Over The Air update ******/
-#ifdef OTA
-  const char *OTA_NAME = "garden_watering";
-  const char *OTA_PASS_HASH = "c3be31f8c0878e2a4f007200220ce2ba";
-#endif // #ifdef OTA  
+const char *NTP_SERVER = "lu.pool.ntp.org"; // NTP settings
+// your time zone (https://remotemonitoringsystems.ca/time-zone-abbreviations.php)
+const char *TZ_INFO    = "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00";
 
 /****** MQTT settings ******/
 #define MQTT_MAX_PACKET_SIZE 512
@@ -120,17 +123,17 @@ float temp(NAN), hum(NAN), pres(NAN);
                     // Oversampling = pressure ×1, temperature ×1, humidity ×1, filter off,
 #endif
 
-ESPBacker B;
+ESPToolbox Tb;
 
 /********** SETUP *************************************************************/
 void setup() {
-  B.set_led_log(true);                 // use builtin LED for debugging
-  B.set_serial_log(true,1);            // 2 parameter = interface (1 = Serial1)
-  B.set_udp_log(true, UDP_LOG_PC_IP, UDP_LOG_PORT); // use "nc -kulw 0 6666"  
+  Tb.set_led_log(true);                 // use builtin LED for debugging
+  Tb.set_serial_log(true,1);            // 2 parameter = interface (1 = Serial1)
+  Tb.set_udp_log(true, UDP_LOG_PC_IP, UDP_LOG_PORT); // use "nc -kulw 0 6666"  
   init_relays(PIN_RELAYS,sizeof(PIN_RELAYS));
   init_wifi(); 
   delay(1000);
-  B.log_ln("Helu");
+  Tb.log_ln("Helu");
   #ifdef BME280_I2C
     init_bme280();     
   #endif  
@@ -139,9 +142,9 @@ void setup() {
   MQTT_Client.setCallback(MQTT_callback);
   //mqtt_connect();
   #ifdef OTA
-    B.init_ota(OTA_NAME, OTA_PASS_HASH);
+    Tb.init_ota(OTA_NAME, OTA_PASS_HASH);
   #endif // ifdef OTA
-  B.blink_led_x_times(3);
+  Tb.blink_led_x_times(3);
 }
 
 /********** LOOP  **************************************************************/
@@ -151,7 +154,7 @@ void loop() {
   #endif // ifdef OTA
   handle_relays();
   // Publish every PUBLISH_TIME  
-  if (B.non_blocking_delay(PUBLISH_TIME)) {
+  if (Tb.non_blocking_delay(PUBLISH_TIME)) {
     #ifdef BME280_I2C
       get_data_bme280();
     #endif    
@@ -180,10 +183,10 @@ void loop() {
 /********** WiFi functions ****************************************************/
 void init_wifi() {
   #ifdef STATIC
-    B.init_wifi_sta(WIFI_SSID, WIFI_PASSWORD, NET_HOSTNAME, NET_LOCAL_IP,
+    Tb.init_wifi_sta(WIFI_SSID, WIFI_PASSWORD, NET_HOSTNAME, NET_LOCAL_IP,
                   NET_GATEWAY, NET_MASK);
   #else                  
-    B.init_wifi_sta(WIFI_SSID, WIFI_PASSWORD, NET_MDNSNAME, NET_HOSTNAME);                       
+    Tb.init_wifi_sta(WIFI_SSID, WIFI_PASSWORD, NET_MDNSNAME, NET_HOSTNAME);                       
   #endif // ifdef STATIC
 }
 
@@ -191,22 +194,22 @@ void init_wifi() {
 // connect to MQTT server
 void mqtt_connect() {
   while (!MQTT_Client.connected()) { // Loop until we're reconnected
-    B.log("Attempting MQTT connection...");    
+    Tb.log("Attempting MQTT connection...");    
     #ifdef MQTTSECURE  
       if (MQTT_Client.connect(MQTT_CLIENT_ID, MQTT_USER, MQTT_PASS)) {
     #else
       if (MQTT_Client.connect(MQTT_CLIENT_ID)) { // Attempt to connect
     #endif // ifdef UNMQTTSECURE
-      B.log_ln("MQTT connected");      
+      Tb.log_ln("MQTT connected");      
       MQTT_Client.subscribe(MQTT_TOPIC_IN.c_str());
       // Once connected, publish an announcement...    
       //MQTT_Client.publish(MQTT_TOPIC, "{\"dt\":\"connected\"}");
       // don't because OpenHAB does not like this ...      
     }
     else {
-      B.log("MQTT connection failed, rc=");
-      B.log(String(MQTT_Client.state()));
-      B.log_ln(" try again in 5 seconds");
+      Tb.log("MQTT connection failed, rc=");
+      Tb.log(String(MQTT_Client.state()));
+      Tb.log_ln(" try again in 5 seconds");
       delay(5000);  // Wait 5 seconds before retrying
     }
   }
@@ -215,16 +218,16 @@ void mqtt_connect() {
 // Command struct: {"Relay [0-4]":1,"Time [min]":20};
 void MQTT_callback(char* topic, byte* payload, unsigned int length) {
   String message;
-  B.log_ln("Message arrived [" + String(topic) + "] ");
+  Tb.log_ln("Message arrived [" + String(topic) + "] ");
   for (int i=0;i<length;i++) {    
     message += String((char)payload[i]);
   }
-  B.log_ln(message);
+  Tb.log_ln(message);
   deserializeJson(doc_in, message);
   byte nr = doc_in["Relay [0-4]"];  
   unsigned long time_ms = doc_in["Time [min]"];
   time_ms = time_ms * 60UL *1000UL;  
-  B.log_ln("Nr: " + String(nr) + " time: " + String(time_ms));
+  Tb.log_ln("Nr: " + String(nr) + " time: " + String(time_ms));
   if ((nr >= 0) && (nr <= 4)) {    
     if (time_ms != 0) {
       relay_times_ms[nr] = time_ms;
@@ -241,18 +244,18 @@ void MQTT_callback(char* topic, byte* payload, unsigned int length) {
   void init_bme280() {
     Wire.begin();
     while(!bme.begin()) {
-      B.log_ln("Could not find BME280 sensor!");
+      Tb.log_ln("Could not find BME280 sensor!");
       delay(1000);
     }
     switch(bme.chipModel())  {
        case BME280::ChipModel_BME280:
-         B.log_ln("Found BME280 sensor! Success.");
+         Tb.log_ln("Found BME280 sensor! Success.");
          break;
        case BME280::ChipModel_BMP280:
-         B.log_ln("Found BMP280 sensor! No Humidity available.");
+         Tb.log_ln("Found BMP280 sensor! No Humidity available.");
          break;
        default:
-         B.log_ln("Found UNKNOWN sensor! Error!");
+         Tb.log_ln("Found UNKNOWN sensor! Error!");
     }
   }
 
@@ -260,7 +263,7 @@ void get_data_bme280() {
   BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
   BME280::PresUnit presUnit(BME280::PresUnit_Pa);
   bme.read(pres, temp, hum, tempUnit, presUnit);
-  B.log_ln("Temp: " + (String(temp)) + " Hum: " + (String(hum)) + 
+  Tb.log_ln("Temp: " + (String(temp)) + " Hum: " + (String(hum)) + 
            " Pres: " + (String(pres)));
 }
 #endif  // BME280_I2C
@@ -282,13 +285,13 @@ void handle_relays() {
       relay_stop_flags[i] = false;
       digitalWrite(PIN_RELAYS[i],LOW);
       relay_prev_millis[i] = millis(); 
-      B.log_ln("Relay Nr: " + String(i) + " started (" + String(millis()) + ')');
+      Tb.log_ln("Relay Nr: " + String(i) + " started (" + String(millis()) + ')');
     }  
     if (relay_stop_flags[i] == false) {      
       if ((millis() - relay_prev_millis[i]) > relay_times_ms[i]) {
         relay_stop_flags[i] = true;
         digitalWrite(PIN_RELAYS[i],HIGH);      
-        B.log_ln("Relay Nr: " + String(i) + " stopped (" + String(millis()) + ')');
+        Tb.log_ln("Relay Nr: " + String(i) + " stopped (" + String(millis()) + ')');
       }
     }
   }
