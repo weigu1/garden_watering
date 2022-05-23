@@ -81,7 +81,7 @@ const char *NET_HOSTNAME = "watering";      // optional
   IPAddress NET_GATEWAY (192,168,1,20);
   IPAddress NET_MASK (255,255,255,0);  
 #endif // ifdef STATIC*/
-const word UDP_LOG_PORT = 6666;             // UDP logging settings
+const word UDP_LOG_PORT = 6667;             // UDP logging settings
 IPAddress UDP_LOG_PC_IP(192,168,1,50);
 const char *NTP_SERVER = "lu.pool.ntp.org"; // NTP settings
 // your time zone (https://remotemonitoringsystems.ca/time-zone-abbreviations.php)
@@ -129,7 +129,7 @@ ESPToolbox Tb;
 void setup() {
   Tb.set_led_log(true);                 // use builtin LED for debugging
   Tb.set_serial_log(true,1);            // 2 parameter = interface (1 = Serial1)
-  Tb.set_udp_log(true, UDP_LOG_PC_IP, UDP_LOG_PORT); // use "nc -kulw 0 6666"  
+  Tb.set_udp_log(true, UDP_LOG_PC_IP, UDP_LOG_PORT); // use "nc -kulw 0 6667"  
   init_relays(PIN_RELAYS,sizeof(PIN_RELAYS));
   init_wifi(); 
   delay(1000);
