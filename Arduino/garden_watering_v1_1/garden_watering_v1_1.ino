@@ -1,7 +1,7 @@
 /*
   garden_watering.ino
 
-  V1.1 2022-05-15
+  V1.1 2022-05-23
   changes from v1.0: added config file, mqtt secure bug, added scheduled
                      erigation.
                       
@@ -104,7 +104,7 @@ float temp(NAN), hum(NAN), pres(NAN);
 
 ESPToolbox Tb;
 
-/********** SETUP *************************************************************/
+/********** SETUP ************************************************************/
 void setup() {
   Tb.set_led_log(true);                 // use builtin LED for debugging
   //Tb.set_serial_log(true,1);        // 2 parameter = interface (1 = Serial1)  
@@ -126,7 +126,7 @@ void setup() {
   Tb.log_ln("Setup done!");
 }
 
-/********** LOOP  **************************************************************/
+/********** LOOP  ************************************************************/
 
 void loop() {
   #ifdef OTA
@@ -149,7 +149,9 @@ void loop() {
   delay(10); // needed for the watchdog!
 }
 
-/********** WiFi functions ****************************************************/
+/********** WiFi functions ***************************************************/
+
+// init WiFi (overloaded function if STATIC)
 void init_wifi() {
   #ifdef STATIC
     Tb.init_wifi_sta(WIFI_SSID, WIFI_PASSWORD, NET_HOSTNAME, NET_LOCAL_IP,
@@ -159,7 +161,8 @@ void init_wifi() {
   #endif // ifdef STATIC
 }
 
-/********** MQTT functions ****************************************************/
+/********** MQTT functions ***************************************************/
+
 // connect to MQTT server
 void mqtt_connect() {
   while (!MQTT_Client.connected()) { // Loop until we're reconnected
@@ -184,6 +187,7 @@ void mqtt_connect() {
   }
 }
 
+// MQTT get the time, relay flags ant temperature an publish the data
 void MQTT_get_temp_and_publish() {
   DynamicJsonDocument doc_out(512);
   String mqtt_msg;  
@@ -207,6 +211,7 @@ void MQTT_get_temp_and_publish() {
   Tb.log_ln(Tb.t.time);
 }  
 
+// MQTT callback
 // Commands in JSON: {"Relay_(0-4)":1,"Time_min":20}
 //                   {"Auto_(0-1)":1}
 void MQTT_callback(char* topic, byte* payload, unsigned int length) {
@@ -241,7 +246,9 @@ void MQTT_callback(char* topic, byte* payload, unsigned int length) {
   }  
 }
 
-/********** BME280 functions **************************************************/
+/********** BME280 functions *************************************************/
+
+// initialise the BME280 sensor
 #ifdef BME280_I2C
   void init_bme280() {
     Wire.begin();
@@ -261,6 +268,7 @@ void MQTT_callback(char* topic, byte* payload, unsigned int length) {
     }
   }
 
+// get BME280 data and log it
 void get_data_bme280() {
   BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
   BME280::PresUnit presUnit(BME280::PresUnit_Pa);
@@ -282,7 +290,7 @@ void init_relays(const byte PIN_RELAYS[], byte number_of_relays) {
   }
 }
 
-// 
+// handle auto watering (array in config.h)
 void handle_auto_watering() {
   byte nr;
   unsigned long time_ms;
@@ -316,6 +324,7 @@ void handle_auto_watering() {
 }
 
 // start watering if start flag = true and stop it if time is over
+
 void handle_relays() {
   for (byte i=0; i<5; i++) {
     if (relay_start_flags[i] == true) {
