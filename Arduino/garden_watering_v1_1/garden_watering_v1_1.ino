@@ -116,6 +116,7 @@ void setup() {
     init_bme280();     
   #endif
   delay(2000);                                  // give it some time   
+  MQTT_Client.setBufferSize(MQTT_MAXIMUM_PACKET_SIZE);
   MQTT_Client.setServer(MQTT_SERVER,MQTT_PORT); //open connection MQTT server
   MQTT_Client.setCallback(MQTT_callback);
   //mqtt_connect();
@@ -189,8 +190,8 @@ void mqtt_connect() {
 
 // MQTT get the time, relay flags ant temperature an publish the data
 void MQTT_get_temp_and_publish() {
-  DynamicJsonDocument doc_out(512);
-  String mqtt_msg;  
+  DynamicJsonDocument doc_out(1024);
+  String mqtt_msg, we_msg;  
   doc_out["datetime"] = Tb.t.datetime;
   #ifdef BME280_I2C
     get_data_bme280();
@@ -203,7 +204,13 @@ void MQTT_get_temp_and_publish() {
   doc_out["Relay_2"] = (byte)!relay_stop_flags[2];
   doc_out["Relay_3"] = (byte)!relay_stop_flags[3];
   doc_out["Relay_4"] = (byte)!relay_stop_flags[4];
-  doc_out["Auto_flag"] = (byte)auto_flag;
+  doc_out["Auto_flag"] = (byte)auto_flag;    
+  for (byte i=0; i<(sizeof(watering_events)/sizeof(watering_events[0])); i++) {
+    we_msg = String(watering_events[i].relay_nr) + ' ' +
+             String(watering_events[i].start_time) + ' ' +
+             String(watering_events[i].duration);
+    doc_out["Watering_event_" + String(i) + "_(relay_start_duration)"] = we_msg;
+  }
   mqtt_msg = "";
   serializeJson(doc_out, mqtt_msg);
   MQTT_Client.publish(MQTT_TOPIC_OUT.c_str(),mqtt_msg.c_str());    
@@ -214,9 +221,11 @@ void MQTT_get_temp_and_publish() {
 // MQTT callback
 // Commands in JSON: {"Relay_(0-4)":1,"Time_min":20}
 //                   {"Auto_(0-1)":1}
+//                   {"Event_(nr_relay_start_duration)":"2 3 1900 15"}
 void MQTT_callback(char* topic, byte* payload, unsigned int length) {
   DynamicJsonDocument doc_in(256);
   byte nr;
+  unsigned int i, tmp;
   unsigned long time_ms;
   String message;
   Tb.log_ln("Message arrived [" + String(topic) + "] ");
@@ -228,6 +237,17 @@ void MQTT_callback(char* topic, byte* payload, unsigned int length) {
   if (doc_in.containsKey("Auto_(0-1)")) {
     auto_flag = bool(doc_in["Auto_(0-1)"]); 
     Tb.log_ln("Auto_flag arrived [" + String(auto_flag) + "] ");
+  }
+  else if (doc_in.containsKey("Event_(nr_relay_start_duration)")) {
+      String event_str = doc_in["Event_(nr_relay_start_duration)"]; 
+      Tb.log_ln(event_str);
+      i = event_str.substring(0,1).toInt();      
+      tmp = event_str.substring(2,3).toInt();
+      watering_events[i].relay_nr = tmp;
+      tmp = event_str.substring(4,8).toInt();
+      watering_events[i].start_time = tmp;
+      tmp = event_str.substring(9).toInt();
+      watering_events[i].duration = tmp;  
   }
   else {
     nr = doc_in["Relay_(0-4)"];  

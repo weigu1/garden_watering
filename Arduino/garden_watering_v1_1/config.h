@@ -12,9 +12,9 @@ const char *MQTT_SERVER = "192.168.178.222";
 /******* Automated watering array *******/
 bool auto_flag = 1;
 struct we {
-  const byte relay_nr;
-  const unsigned int start_time;
-  const unsigned int duration;
+  unsigned int relay_nr;
+  unsigned int start_time;
+  unsigned int duration;
 };
 
 // A triple of data per watering event:
@@ -24,12 +24,13 @@ struct we {
 we watering_events[] = {
   {0,1800,10}, // relay number, time (hr*100+min), minutes to water
   {1,1811,20},
-  {0,2000,20},
-  {0,2030,20},
+  {20,2000,20},
+  {3,2030,20},
+  {4,2055,10},
 };  
 
 /****** Publishes every in milliseconds ******/
-const long PUBLISH_TIME = 60000;
+const long PUBLISH_TIME = 10000;
 
 /******* Relays *******/
 const byte NR_OF_RELAYS = 5;
@@ -40,6 +41,7 @@ unsigned long relay_times_ms[NR_OF_RELAYS] = {10000,20000,30000,40000,50000};
 unsigned long relay_prev_millis[NR_OF_RELAYS] = {0,0,0,0,0};
 
 /****** MQTT settings ******/
+const int MQTT_MAXIMUM_PACKET_SIZE = 1024; // look in setup()
 const char *MQTT_CLIENT_ID = "garden_watering"; // this must be unique!!!
 String MQTT_TOPIC_OUT = "weigu/garden/watering/data";
 String MQTT_TOPIC_IN = "weigu/garden/watering/command";

@@ -33,37 +33,30 @@ We get two topics:
     String MQTT_TOPIC_IN = "weigu/garden/watering/command";
 ```
 
-Commands are in JSON and have the following JSON format (I eliminated the square brackets in the new version (1.1) because openHAB had problems with those when transforming):
+Commands are in JSON and have the following JSON format (I eliminated the square brackets in the new version 1.1 because openHAB had problems with those when transforming):
 
 ```json
     {"Relay_(0-4)":4,"Time_min":20}
-    {"Auto_(0-1)":1}    
+    {"Auto_(0-1)":1} 
+    {"Event_(nr_relay_start_duration)":"3 3 2021 5"}   
 ```
 
-![mqtt publish](png/mqttfx_pub_new_300.png "mqtt publish")
+![mqtt publish](png/mqttfx_pub_new.png "mqtt publish")
 
-Watering stops automatically after x minutes. To stop manually the time is set to zero:
++ With the first command you can start or stop manually the watering of a relay. Watering stops automatically after x minutes. To stop manually the time is set to zero: `{"Relay_(0-4)":4,"Time_min":0}`
 
-```json
-    {"Relay_(0-4)":4,"Time_min":0}
-```
++ The second command (version 1.1) switches automatic watering on (1) or off (0).
 
-In the new version (1.1) we get an automatic watering if needed and we can switch automatic watering on (1) or off (0).
++ With the third command (version 1.1) we can also change via MQTT the watering events in the events array. Supported are up to 10 (0-9) events. Default are 5 events but you can add events in the `config.h` file. In the automated watering array we define the start times of a relay and duration of watering events. If we want e.g. that relay 3 opens at 15h15 for 15 minutes we add the line: `{3,1515,15}` to the array. With the command: `{"Event_(nr_relay_start_duration)":"3 3 2021 5"}` we can change this. The first number is the event number (0-9).   
 
 The following is seen on the data channel:
 
-![mqtt publish](png/mqttfx_sub_new_300.png "mqtt publish")
+![mqtt subscribe](png/mqttfx_sub_new.png "mqtt subscribe")
 
-In the new version all relevant data you must or can change are in a config (`config.h`) file, also contained in the main folder. You can also place this file in the sketchbook/library folder named `Secrets` and rename it to your needs (e.g. `secrets.h`).
+In the new version  (1.1) all relevant data you must or can change are in a config (`config.h`) file, also contained in the main folder. You can also place this file in the sketchbook/library folder named `Secrets` and rename it to your needs (e.g. `secrets.h`).
 
-In the main file (.ino) you can activate or deactivate features by commenting or uncommenting some lines. Here you must activate `USE_SECRETS`.
+In the main file (.ino) you can activate or deactivate features by commenting or uncommenting some lines. Here you must activate `USE_SECRETS`:
 
-In the `config.h` file, you must change the WiFi parameter and the MQTT server address. In the automated watering array we define the timers and duration of watering events. If we want that relay 3 opens at 15h15 for 15 minutes we add the line: 
-
-```C
-      {3,1515,15},
-```
-
-to the array.
+In the `config.h` file, you must change the WiFi parameter and the MQTT server address. In the automated watering array we define the start times and duration of watering events.
 
 Other things we perhaps want to change are the publishing interval `PUBLISH_TIME` or the MQTT topics.
