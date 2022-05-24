@@ -24,7 +24,7 @@ struct we {
 we watering_events[] = {
   {0,1800,10}, // relay number, time (hr*100+min), minutes to water
   {1,1811,20},
-  {20,2000,20},
+  {2,2000,20},
   {3,2030,20},
   {4,2055,10},
 };  
