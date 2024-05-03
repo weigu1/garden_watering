@@ -58,7 +58,7 @@
 
 /****** Arduino libraries needed ******/
 #ifdef USE_SECRETS
-  #include <secrets_garden.h>
+  #include <secrets_garden_watering.h>
 #else  
   #include "config.h"      // most of the things you need to change are here
 #endif // USE_SECRETS  
@@ -209,7 +209,7 @@ void MQTT_get_temp_and_publish() {
     we_msg = String(watering_events[i].relay_nr) + ' ' +
              String(watering_events[i].start_time) + ' ' +
              String(watering_events[i].duration);
-    doc_out["Watering_event_" + String(i) + "_(relay_start_duration)"] = we_msg;
+    doc_out["Watering_event_" + String(i) + "_relay_start_duration"] = we_msg;
   }
   mqtt_msg = "";
   serializeJson(doc_out, mqtt_msg);
@@ -222,6 +222,7 @@ void MQTT_get_temp_and_publish() {
 // Commands in JSON: {"Relay_(0-4)":1,"Time_min":20}
 //                   {"Auto_(0-1)":1}
 //                   {"Event_(nr_relay_start_duration)":"2 3 1900 15"}
+
 void MQTT_callback(char* topic, byte* payload, unsigned int length) {
   DynamicJsonDocument doc_in(256);
   byte nr;
@@ -323,8 +324,7 @@ void handle_auto_watering() {
       for (byte i=0; i<(sizeof(watering_events)/sizeof(watering_events[0])); i++) {        
         if ((Tb.t.hour*100+Tb.t.minute)==watering_events[i].start_time) {          
           one_minute_flag = watering_events[i].start_time;
-          Tb.log("auto_watering_started at ");
-          Tb.log_ln(Tb.t.time);
+          Tb.log_ln("auto_watering_started at " + String(Tb.t.time));
           nr = watering_events[i].relay_nr;
           time_ms = watering_events[i].duration;
           time_ms = time_ms * 60UL *1000UL;  

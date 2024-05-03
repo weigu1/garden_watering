@@ -22,11 +22,11 @@ struct we {
 // never use 2 relays at the same time
 
 we watering_events[] = {
-  {0,1800,10}, // relay number, time (hr*100+min), minutes to water
-  {1,1811,20},
-  {2,2000,20},
-  {3,2030,20},
-  {4,2055,10},
+  {0,1900,5}, // relay number, time (hr*100+min), minutes to water
+  {1,1910,10},
+  {2,2000,0},
+  {3,2030,0},
+  {4,2055,0},
 };  
 
 /****** Publishes every in milliseconds ******/
@@ -61,6 +61,7 @@ const char *TZ_INFO    = "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00";
 
 // only if you use OTA (uncomment //#define OTA in ino file)
 const char *MY_OTA_NAME = "garden_watering"; // optional (access with garden_watering.local)
+// Linux Create Hasgh with: echo -n 'P@ssword1' | md5sum
 const char *MY_OTA_PASS_HASH = "myHash";     // Hash for password
 
 // only if you use a static address (uncomment //#define STATIC in ino file)
